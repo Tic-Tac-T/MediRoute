@@ -161,7 +161,14 @@ function TriageForm({ onResult, onError, onLoading, isLoading }) {
       onResult(data);
     } catch (err) {
       const networkError = err instanceof TypeError;
-      onError(networkError ? "Network error. Please check your internet connection." : (err.message || "Server error"));
+      const jsonParseError = err instanceof SyntaxError;
+      if (networkError) {
+        onError("Network error. Please check your internet connection.");
+      } else if (jsonParseError) {
+        onError("Server error");
+      } else {
+        onError(err.message || "Server error");
+      }
     } finally {
       onLoading(false);
     }
