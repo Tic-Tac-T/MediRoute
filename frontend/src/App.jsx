@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5001";
+
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const DURATION_OPTIONS = [
@@ -129,7 +131,7 @@ function TriageForm({ onResult, onError, onLoading, isLoading }) {
     onResult(null);
 
     try {
-      const response = await fetch("/triage", {
+      const response = await fetch(`${API_URL}/triage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -139,15 +141,27 @@ function TriageForm({ onResult, onError, onLoading, isLoading }) {
         }),
       });
 
-      const data = await response.json();
+      const contentType = response.headers.get("content-type") || "";
+      let data = null;
+
+      if (contentType.includes("application/json")) {
+        data = await response.json();
+      } else {
+        await response.text();
+      }
+
+      if (!contentType.includes("application/json")) {
+        throw new Error("Server error");
+      }
 
       if (!response.ok) {
-        throw new Error(data.error || "Server returned an error.");
+        throw new Error(data?.error || "Server error");
       }
 
       onResult(data);
     } catch (err) {
-      onError(err.message || "Something went wrong. Please try again.");
+      const networkError = err instanceof TypeError;
+      onError(networkError ? "Network error. Please check your internet connection." : (err.message || "Server error"));
     } finally {
       onLoading(false);
     }
