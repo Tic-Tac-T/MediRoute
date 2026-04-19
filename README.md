@@ -1,6 +1,6 @@
-<<<<<<< HEAD
-# 🏥 MediRoute — AI Healthcare Triage Assistant
 
+# 🏥 MediRoute — AI Healthcare Triage Assistant
+working link - medi-route-lyart.vercel.app
 MediRoute is an AI-powered triage system that helps users decide whether to:
 - 🟢 Manage symptoms at home (self-care)
 - 🟡 Visit a clinic
