@@ -8,11 +8,11 @@ export default defineConfig({
     proxy: {
       // Proxy /triage and /health API calls to the backend during development
       "/triage": {
-        target: "http://localhost:5050",
+        target: "https://mediroute-2ba2.onrender.com",
         changeOrigin: true,
       },
       "/health": {
-        target: "http://localhost:5050",
+        target: "https://mediroute-2ba2.onrender.com",
         changeOrigin: true,
       },
     },
